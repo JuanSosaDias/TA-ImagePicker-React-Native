@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Image, View, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
-export default function ImagePickerExample() {
+export default function ImagePickerExample({ setImageTask }) {
   const [image, setImage] = useState(null);
 
   const pickImage = async () => {
@@ -17,14 +17,15 @@ export default function ImagePickerExample() {
     console.log(result);
 
     if (!result.canceled) {
+      setImageTask(result.assets[0].uri);
       setImage(result.assets[0].uri);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={styles.image} />}
+      <Button title="Sube una foto" onPress={pickImage} />
+      {/* {image && <Image source={{ uri: image }} style={styles.image} />} */}
     </View>
   );
 }
