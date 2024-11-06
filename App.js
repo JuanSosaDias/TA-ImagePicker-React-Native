@@ -1,11 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import ImagePickerExample from "./Components/ImagePicker";
+import Home from "./Views/Home";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <ImagePickerExample/>
+      <Home />
       <StatusBar style="auto" />
     </View>
   );
