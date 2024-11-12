@@ -9,7 +9,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  Modal,
 } from "react-native";
 import ImagePickerExample from "../Components/ImagePicker";
 
@@ -17,7 +16,6 @@ export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState("");
   const [imageTask, setImageTask] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
 
   const handleAddTask = () => {
     if (task.trim() !== "") {
@@ -30,7 +28,6 @@ export default function Home() {
       setTasks([...tasks, newTask]);
       setTask("");
       setImageTask(null); // Reset image after adding task
-      setModalVisible(false);
     }
   };
 
@@ -48,41 +45,16 @@ export default function Home() {
     <View style={styles.container}>
       <Text style={styles.title}>ToDo List</Text>
       <StatusBar style="auto" />
-      <Button onPress={() => setModalVisible(true)} title="Agregar tarea" />
-
-      <Modal
-        visible={modalVisible}
-        animationType="fade"
-        transparent={true}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Nueva Tarea</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setTask}
-              value={task}
-              placeholder="Escribe la tarea"
-            />
-            <ImagePickerExample setImageTask={setImageTask} />
-
-            {/* Vista previa de la imagen seleccionada */}
-            {imageTask && (
-              <Image source={{ uri: imageTask }} style={styles.previewImage} />
-            )}
-            <View style={styles.addAndDeleteButtons}>
-              <Button onPress={handleAddTask} title="Agregar" />
-              <Button
-                onPress={() => setModalVisible(false)}
-                title="Cancelar"
-                color="#ff6347"
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
-
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          onChangeText={setTask}
+          value={task}
+          placeholder="Escribe la tarea"
+        />
+        <ImagePickerExample setImageTask={setImageTask} />
+        <Button onPress={handleAddTask} title="Agregar tarea" />
+      </View>
       <ScrollView style={styles.tasksContainer}>
         {tasks.map((tarea) => (
           <View key={tarea.id} style={styles.task}>
@@ -90,20 +62,18 @@ export default function Home() {
             {tarea.imageTask && (
               <Image source={{ uri: tarea.imageTask }} style={styles.image} />
             )}
-            <View style={styles.doneAndDeleteButtons}>
-              <TouchableOpacity
-                onPress={() => handleIsCompleted(tarea.id)}
-                style={styles.completedTaskButton}
-              >
-                <Text>Hecha</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => handleDeleteTask(tarea.id)}
-              >
-                <Text>Eliminar tarea</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              onPress={() => handleIsCompleted(tarea.id)}
+              style={styles.completedTaskButton}
+            >
+              <Text>Hecha</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => handleDeleteTask(tarea.id)}
+            >
+              <Text>Eliminar tarea</Text>
+            </TouchableOpacity>
           </View>
         ))}
       </ScrollView>
@@ -124,11 +94,27 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
   },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+    width: "90%",
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginRight: 10,
+  },
   tasksContainer: {
+    width: "90%",
     marginTop: 10,
   },
   task: {
-    width: "90%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -137,42 +123,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: "#ddd",
     borderWidth: 1,
-    margin: 10,
-  },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
-    marginTop: 20,
-    width: "80%",
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    width: "80%",
-    height: "50%",
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    alignItems: "center",
-    padding: 20,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
     marginBottom: 10,
+  },
+  taskText: {
+    fontSize: 16,
+    flex: 1,
   },
   completedTaskButton: {
     backgroundColor: "#4cbc3d",
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
-    marginRight: 10, // Espacio entre los botones
   },
   deleteButton: {
     backgroundColor: "#ff6347",
@@ -185,22 +146,4 @@ const styles = StyleSheet.create({
     height: 50,
     marginLeft: 10,
   },
-  previewImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  addAndDeleteButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "80%",
-  },
-  doneAndDeleteButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "auto",
-    marginTop: 10,
-  },
 });
-
