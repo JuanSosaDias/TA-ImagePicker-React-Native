@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
-    marginRight: 10, // Espacio entre los botones
+    marginRight: 10,
   },
   deleteButton: {
     backgroundColor: "#ff6347",
